@@ -7,9 +7,11 @@ import java.util.List;
 @Service
 public class AsterixService {
     private final AsterixRepository asterixRepository;
+    private final IdService idService;
 
-    public AsterixService(AsterixRepository asterixRepository) {
+    public AsterixService(AsterixRepository asterixRepository, IdService idService) {
         this.asterixRepository = asterixRepository;
+        this.idService = idService;
     }
 
     public List<Character> getAllCharacters() {
@@ -21,7 +23,8 @@ public class AsterixService {
     }
 
     public Character postNewCharacter(Character newCharacter) {
-        return asterixRepository.insert(newCharacter);
+        Character newCharacterWithId = newCharacter.withId(idService.generateId());
+        return asterixRepository.insert(newCharacterWithId);
     }
 
     public Character putCharacter(Character characterToUpdate) {

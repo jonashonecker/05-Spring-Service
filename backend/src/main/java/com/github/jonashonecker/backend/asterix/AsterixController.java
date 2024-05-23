@@ -32,15 +32,22 @@ public class AsterixController {
     }
 
     @GetMapping("/statistics")
-    public BigDecimal calcMeanAgeByProfession (@RequestParam String profession) {
+    public BigDecimal calcMeanAgeByProfession(@RequestParam String profession) {
         List<Character> characters = asterixService.getCharacterByProfession(profession);
         int sum = characters.stream().mapToInt(Character::age).sum();
         return new BigDecimal(sum).divide(BigDecimal.valueOf(characters.size()), 2, RoundingMode.HALF_UP);
     }
 
     @PostMapping
-    public Character insertCharacter(@RequestBody Character newCharacter) {
-        return asterixService.postNewCharacter(newCharacter);
+    public Character insertCharacter(@RequestBody NewCharacter newCharacter) {
+        return asterixService.postNewCharacter(
+                Character.builder()
+                        .id(null)
+                        .age(newCharacter.age())
+                        .name(newCharacter.name())
+                        .profession(newCharacter.profession())
+                        .build()
+        );
     }
 
     @PutMapping
