@@ -19,16 +19,9 @@ public class AsterixController {
 
     @GetMapping
     public List<Character> getAllCharacters(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) Integer age,
-            @RequestParam(required = false) String profession
+            @RequestParam(required = false) Integer age
     ) {
-        List<Character> characters = asterixService.getAllCharacters();
-        return characters.stream()
-                .filter(c -> name == null || c.name().equals(name))
-                .filter(c -> age == null || c.age() == age)
-                .filter(c -> profession == null || c.profession().equals(profession))
-                .collect(Collectors.toList());
+        return asterixService.getAllCharacters(age);
     }
 
     @GetMapping("{id}")

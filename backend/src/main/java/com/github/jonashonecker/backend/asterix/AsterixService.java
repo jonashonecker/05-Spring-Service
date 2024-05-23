@@ -14,7 +14,10 @@ public class AsterixService {
         this.idService = idService;
     }
 
-    public List<Character> getAllCharacters() {
+    public List<Character> getAllCharacters(Integer age) {
+        if (age != null ) {
+            return asterixRepository.findByAgeLessThanEqual(age);
+        }
         return asterixRepository.findAll();
     }
 
