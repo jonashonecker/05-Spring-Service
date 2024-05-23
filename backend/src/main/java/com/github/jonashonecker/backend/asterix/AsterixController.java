@@ -11,10 +11,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/characters")
 public class AsterixController {
 
-    private final AsterixRepository asterixRepository;
+    private final AsterixService asterixService;
 
-    public AsterixController(AsterixRepository asterixRepository) {
-        this.asterixRepository = asterixRepository;
+    public AsterixController(AsterixService asterixService) {
+        this.asterixService = asterixService;
     }
 
     @GetMapping
@@ -23,7 +23,7 @@ public class AsterixController {
             @RequestParam(required = false) Integer age,
             @RequestParam(required = false) String profession
     ) {
-        List<Character> characters = asterixRepository.findAll();
+        List<Character> characters = asterixService.getAllCharacters();
         return characters.stream()
                 .filter(c -> name == null || c.name().equals(name))
                 .filter(c -> age == null || c.age() == age)
@@ -33,23 +33,23 @@ public class AsterixController {
 
     @GetMapping("/statistics")
     public BigDecimal calcMeanAgeByProfession (@RequestParam String profession) {
-        List<Character> characters = asterixRepository.findByProfessionAndReturnAgeOnly(profession);
+        List<Character> characters = asterixService.getCharacterByProfession(profession);
         int sum = characters.stream().mapToInt(Character::age).sum();
         return new BigDecimal(sum).divide(BigDecimal.valueOf(characters.size()), 2, RoundingMode.HALF_UP);
     }
 
     @PostMapping
     public Character insertCharacter(@RequestBody Character newCharacter) {
-        return asterixRepository.insert(newCharacter);
+        return asterixService.postNewCharacter(newCharacter);
     }
 
     @PutMapping
     public Character updateCharacter(@RequestBody Character characterToUpdate) {
-        return asterixRepository.save(characterToUpdate);
+        return asterixService.putCharacter(characterToUpdate);
     }
 
     @DeleteMapping("{id}")
     public void deleteCharacter(@PathVariable String id) {
-        asterixRepository.deleteById(id);
+        asterixService.deleteCharacterById(id);
     }
 }
