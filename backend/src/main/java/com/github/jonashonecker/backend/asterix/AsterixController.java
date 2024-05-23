@@ -48,9 +48,16 @@ public class AsterixController {
         );
     }
 
-    @PutMapping
-    public Character updateCharacter(@RequestBody Character characterToUpdate) {
-        return asterixService.putCharacter(characterToUpdate);
+    @PutMapping("{id}")
+    public Character updateCharacter(@PathVariable String id, @RequestBody UpdateCharacter characterToUpdate) {
+        return asterixService.putCharacter(
+                Character.builder()
+                        .id(id)
+                        .age(characterToUpdate.age())
+                        .name(characterToUpdate.name())
+                        .profession(characterToUpdate.profession())
+                        .build()
+        );
     }
 
     @DeleteMapping("{id}")
