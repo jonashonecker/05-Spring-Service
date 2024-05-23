@@ -31,6 +31,11 @@ public class AsterixController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("{id}")
+    public Character getCharacterById (@PathVariable String id) {
+        return asterixService.getCharacterById(id);
+    }
+
     @GetMapping("/statistics")
     public BigDecimal calcMeanAgeByProfession(@RequestParam String profession) {
         List<Character> characters = asterixService.getCharacterByProfession(profession);

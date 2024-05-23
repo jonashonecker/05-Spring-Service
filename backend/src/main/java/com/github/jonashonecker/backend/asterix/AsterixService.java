@@ -34,4 +34,9 @@ public class AsterixService {
     public void deleteCharacterById(String id) {
         asterixRepository.deleteById(id);
     }
+
+    public Character getCharacterById(String id) {
+        return asterixRepository.findById(id)
+                .orElseThrow();
+    }
 }
